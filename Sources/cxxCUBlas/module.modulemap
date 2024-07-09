@@ -1,0 +1,4 @@
+module cxxCU {
+    requires cplusplus
+    header "cublas_head.hpp"
+}

@@ -1,4 +1,4 @@
-import cxxCUBlas
+import cxxCUBLAS
 
 extension cublasOperation {
     var ascublas : cublasOperation_t {

@@ -1,14 +1,14 @@
-import cxxCUBlas
+import cxxCUBLAS
 
-public protocol CuBlasDataType {}
+public protocol CUBLASDataType {}
 
-extension Float16: CuBlasDataType {}
-extension Float: CuBlasDataType {}
-extension Double: CuBlasDataType {}
-extension Int8: CuBlasDataType {}
-extension Int32: CuBlasDataType {}
+extension Float16: CUBLASDataType {}
+extension Float: CUBLASDataType {}
+extension Double: CUBLASDataType {}
+extension Int8: CUBLASDataType {}
+extension Int32: CUBLASDataType {}
 
-public struct CUBlasHandle: ~Copyable {
+public struct CUBLASHandle: ~Copyable {
     public var handle: cublasHandle_t?
 
     public init() {
@@ -28,7 +28,7 @@ public struct CUBlasHandle: ~Copyable {
     }
 }
 
-public struct CUBlasParams<T: CuBlasDataType>: ~Copyable {
+public struct CUBLASParams<T: CUBLASDataType>: ~Copyable {
     public var A: UnsafePointer<T>
     public var B: UnsafePointer<T>
     public var C: UnsafeMutablePointer<T>

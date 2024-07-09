@@ -14,7 +14,7 @@ let packageDir = URL(fileURLWithPath: #file).deletingLastPathComponent().path
 #endif
 
 let package = Package(
-    name: "SwiftCU-example",
+    name: "SwiftCUBLAS",
     dependencies: 
     [
         .package(url: "https://github.com/machineko/SwiftCU", branch: "main"),
@@ -22,16 +22,16 @@ let package = Package(
     ],
     targets: [
         .target(
-            name: "cxxCUBlas",
+            name: "cxxCUBLAS",
             publicHeadersPath: "include",
             cxxSettings: [
                 .headerSearchPath(cuIncludePath)
             ]
         ),
         .target(
-            name: "SwiftCUBlas",
+            name: "SwiftCUBLAS",
             dependencies: [
-                "cxxCUBlas",
+                "cxxCUBLAS",
                 .product(name: "SwiftCU", package: "SwiftCU"),
             ],
              swiftSettings: [
@@ -42,12 +42,11 @@ let package = Package(
             ]
         ),
           .testTarget(
-            name: "SwiftCUBlasTests",
+            name: "SwiftCUBLASTests",
            
             dependencies: [
-                "SwiftCU", "cxxCUBlas", "SwiftCUBlas",
+                "SwiftCU", "cxxCUBLAS", "SwiftCUBLAS",
                 .product(name: "PythonKit", package: "PythonKit")
-                // .product(name: "Testing", package: "swift-testing"), 
             ],
              swiftSettings: [
                 .interoperabilityMode(.Cxx),

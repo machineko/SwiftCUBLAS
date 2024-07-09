@@ -1,5 +1,5 @@
 import Foundation
-import cxxCUBlas
+import cxxCUBLAS
 import SwiftCU
 
 public extension cublasStatus_t {
@@ -23,8 +23,8 @@ public extension cublasStatus {
     }
 }
 
-public extension CUBlasParams {
-    init(fromRowMajor A: UnsafePointer<T>, B: UnsafePointer<T>, C: UnsafeMutablePointer<T>, m: Int32, n: Int32, k: Int32, batchSize: Int32 = 0, alpha: T, beta: T) where T: CuBlasDataType {
+public extension CUBLASParams {
+    init(fromRowMajor A: UnsafePointer<T>, B: UnsafePointer<T>, C: UnsafeMutablePointer<T>, m: Int32, n: Int32, k: Int32, batchSize: Int32 = 0, alpha: T, beta: T) where T: CUBLASDataType{
         // cublas is using column-major memory, order swapping B with A and n -> m will result in row-major results
         self.A = B
         self.B = A
@@ -46,7 +46,7 @@ public extension CUBlasParams {
         self.ldc = n
     }
 
-    init(fromColumnMajor A: UnsafePointer<T>, B: UnsafePointer<T>, C: UnsafeMutablePointer<T>, m: Int32, n: Int32, k: Int32, batchSize: Int32 = 0, alpha: T, beta: T) where T: CuBlasDataType {
+    init(fromColumnMajor A: UnsafePointer<T>, B: UnsafePointer<T>, C: UnsafeMutablePointer<T>, m: Int32, n: Int32, k: Int32, batchSize: Int32 = 0, alpha: T, beta: T) where T: CUBLASDataType {
         self.A = A
         self.B = B
         self.C = C
@@ -65,7 +65,7 @@ public extension CUBlasParams {
     }
 }
 
-public extension CUBlasHandle {
+public extension CUBLASHandle {
     init(stream: inout cudaStream) {
         var handle: cublasHandle_t?
         let status = cublasCreate_v2(&handle).asSwift
@@ -79,7 +79,7 @@ public extension CUBlasHandle {
         self.handle = handle
     }
 
-    func sgemm_v2(transposeA: cublasOperation = .cublas_op_n, transposeB: cublasOperation = .cublas_op_n, params: inout CUBlasParams<Float32>) -> cublasStatus {
+    func sgemm_v2(transposeA: cublasOperation = .cublas_op_n, transposeB: cublasOperation = .cublas_op_n, params: inout CUBLASParams<Float32>) -> cublasStatus {
         let status = cublasSgemm_v2(
             self.handle, transposeA.ascublas, transposeB.ascublas, params.m, params.n, 
             params.k, &params.alpha, params.A, params.lda, params.B, params.ldb, &params.beta, params.C, params.ldc

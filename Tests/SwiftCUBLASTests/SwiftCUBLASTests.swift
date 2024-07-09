@@ -7,7 +7,7 @@ import PythonKit
 @testable import SwiftCUBLAS
 let npy = Python.import("numpy")
 
-final class SwiftCUBlasTests: XCTestCase {
+final class SwiftCUBLASTests: XCTestCase {
     func testSimpleMatmulRowMajor() throws {
         let m = 2
         let n = 2

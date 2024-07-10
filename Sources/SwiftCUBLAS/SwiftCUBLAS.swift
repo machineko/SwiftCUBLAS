@@ -5,7 +5,7 @@ public protocol CUBLASDataType {}
 extension Float16: CUBLASDataType {}
 extension Float: CUBLASDataType {}
 extension Double: CUBLASDataType {}
-extension UInt8: CUBLASDataType {}
+extension Int8: CUBLASDataType {}
 extension Int32: CUBLASDataType {}
 extension __half: CUBLASDataType {}
 
@@ -43,7 +43,7 @@ public struct CUBLASParams<T: CUBLASDataType>: ~Copyable {
     }
 }
 
-public struct CUBLASParamsMixed<inputType: CUBLASDataType, outputType: CUBLASDataType, computeType>: ~Copyable {
+public struct CUBLASParamsMixed<inputType: CUBLASDataType, outputType: CUBLASDataType, computeType: CUBLASDataType>: ~Copyable {
     public var A: UnsafePointer<inputType>
     public var B: UnsafePointer<inputType>
     public var C: UnsafeMutablePointer<outputType>

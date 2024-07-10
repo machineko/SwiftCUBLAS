@@ -30,8 +30,8 @@ extension CUBLASParamsMixed {
             return CUDA_R_32F
         case is Double.Type:
             return CUDA_R_64F
-        case is UInt8.Type:
-            return CUDA_R_8U
+        case is Int8.Type:
+            return CUDA_R_8I
         case is Int32.Type:
             return CUDA_R_32I
         case is __half.Type:
@@ -174,10 +174,10 @@ public extension CUBLASHandle {
         return status.asSwift
     }
 
-   func gemmEx(
+   func gemmEx<inputType: CUBLASDataType, outputType: CUBLASDataType, computeType: CUBLASDataType>(
         transposeA: cublasOperation = .cublas_op_n,
         transposeB: cublasOperation = .cublas_op_n,
-        params: inout CUBLASParamsMixed<some CUBLASDataType, some CUBLASDataType, some CUBLASDataType>,
+        params: inout CUBLASParamsMixed<inputType, outputType, computeType>,
         computeType: cublasComputeType = .cublas_compute_16f, cublasGemmAlgo: cublasGemmAlgo = .cublas_gemm_dfalt
     ) -> cublasStatus {
         let status = cublasGemmEx(
@@ -193,7 +193,6 @@ public extension CUBLASHandle {
             computeType.ascublas,
             cublasGemmAlgo.ascublas
         )
-        print(status.asSwift)
         return status.asSwift
     }
 

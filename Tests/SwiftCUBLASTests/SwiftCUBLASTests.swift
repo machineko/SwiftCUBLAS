@@ -154,7 +154,6 @@ final class SwiftCUBLASTests: XCTestCase {
         cudaDeviceSynchronize()
         let npyMatmul = npy.matmul(npy.array(A.map{Float32($0)}).reshape([2,4]), npy.array(B.map{Float32($0)}).reshape([4,2]))
         let cNpyArray = npy.array(C.map{Float32($0)}).reshape([2,2])
-        print(cNpyArray, npyMatmul)
         XCTAssert(Bool(npy.allclose(npyMatmul, cNpyArray))!)
     }
 
@@ -261,6 +260,60 @@ final class SwiftCUBLASGenericTests: XCTestCase {
         }
         cudaDeviceSynchronize()
         let npyMatmul = npy.matmul(npy.array(A.map{Float32($0)}).reshape([2,4]), npy.array(B.map{Float32($0)}).reshape([4,2]))
+        let cNpyArray = npy.array(C).reshape([2,2])
+        XCTAssert(Bool(npy.allclose(npyMatmul, cNpyArray))!)
+    }
+
+    func testSimpleMatmulRowMajorU8F32() throws {
+        let m = 2
+        let n = 2
+        let k = 4
+
+        var A: [Int8] = [1, 2, 3, 4,
+                         5, 6, 7, 8]
+
+        var B: [Int8] = [8, 7,
+                         6, 5,
+                         4, 3,
+                         2, 1]
+
+
+        var C: [Float32] = [Float32](repeating: 0.0, count: m * n)
+
+        var aPointer: UnsafeMutableRawPointer?
+        var bPointer: UnsafeMutableRawPointer?
+        var cPointer: UnsafeMutableRawPointer?
+        defer {
+            _ = aPointer.cudaAndHostDeallocate()
+            _ = bPointer.cudaAndHostDeallocate()
+            _ = cPointer.cudaAndHostDeallocate()
+        }
+        let i8Size =  MemoryLayout<Int8>.stride
+        let f32Size =  MemoryLayout<Float32>.stride
+
+        _ = aPointer.cudaMemoryAllocate(m * k * i8Size)
+        _ = bPointer.cudaMemoryAllocate(k * n * i8Size)
+        _ = cPointer.cudaMemoryAllocate(m * n * f32Size)
+
+        _ = aPointer.cudaMemoryCopy(fromRawPointer: &A, numberOfBytes: A.count * i8Size, copyKind: .cudaMemcpyHostToDevice)
+        _ = bPointer.cudaMemoryCopy(fromRawPointer: &B, numberOfBytes: B.count * i8Size, copyKind: .cudaMemcpyHostToDevice)
+
+        let handle = CUBLASHandle()
+        // Input types => UInt8, Output type => F32, compute type => F32
+        var params = CUBLASParamsMixed<Int8, Float32, Float32>(
+            fromRowMajor: aPointer!.assumingMemoryBound(to: Int8.self), B: bPointer!.assumingMemoryBound(to: Int8.self),
+            C: cPointer!.assumingMemoryBound(to: Float32.self), m: Int32(m), n: Int32(n), k: Int32(k), alpha: 1.0, beta: 0.0
+        )
+
+        let status = handle.gemmEx(params: &params, computeType: .cublas_compute_32f)
+        XCTAssert(status.isSuccessful)
+        C.withUnsafeMutableBytes  { rawBufferPointer in
+            var pointerAddress = rawBufferPointer.baseAddress
+            let outStatus = pointerAddress.cudaMemoryCopy(fromMutableRawPointer: cPointer, numberOfBytes: m * n * f32Size, copyKind: .cudaMemcpyDeviceToHost)
+            XCTAssert(outStatus.isSuccessful)
+        }
+        cudaDeviceSynchronize()
+        let npyMatmul = npy.matmul(npy.array(A).reshape([2,4]), npy.array(B).reshape([4,2]))
         let cNpyArray = npy.array(C).reshape([2,2])
         XCTAssert(Bool(npy.allclose(npyMatmul, cNpyArray))!)
     }

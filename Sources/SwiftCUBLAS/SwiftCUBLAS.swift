@@ -8,7 +8,6 @@ extension Float: CUBLASDataType {}
 extension Double: CUBLASDataType {}
 extension Int8: CUBLASDataType {}
 extension Int32: CUBLASDataType {}
-extension __half: CUBLASDataType {}
 
 /// A structure that manages a CUBLAS handle.
 public struct CUBLASHandle: ~Copyable {

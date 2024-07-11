@@ -27,7 +27,7 @@ public enum cublasOperation: Int {
     case cublas_op_n = 0
     case cublas_op_t = 1
     case cublas_op_c = 2
-    static var cublas_op_hermitan: cublasOperation { return .cublas_op_c }  // synonym if CUBLAS_OP_C
+    public static var cublas_op_hermitan: cublasOperation { return .cublas_op_c }  // synonym if CUBLAS_OP_C
     case cublas_op_conjg = 3  // conjugate, placeholder - not supported in the current release
 }
 
@@ -41,7 +41,7 @@ public enum cublasAtomicsMode: Int {
 
 public enum cublasGemmAlgo: Int {
     case cublas_gemm_dfalt = -1
-    static var cublas_gemm_default: cublasGemmAlgo { return .cublas_gemm_dfalt }
+    public static var cublas_gemm_default: cublasGemmAlgo { return .cublas_gemm_dfalt }
     case cublas_gemm_algo0 = 0
     case cublas_gemm_algo1 = 1
     case cublas_gemm_algo2 = 2
@@ -67,7 +67,9 @@ public enum cublasGemmAlgo: Int {
     case cublas_gemm_algo22 = 22
     case cublas_gemm_algo23 = 23
     case cublas_gemm_default_tensor_op = 99
-    static var cublas_gemm_dfalt_tensor_op: cublasGemmAlgo { return .cublas_gemm_default_tensor_op }
+    public static var cublas_gemm_dfalt_tensor_op: cublasGemmAlgo {
+        return .cublas_gemm_default_tensor_op
+    }
     case cublas_gemm_algo0_tensor_op = 100
     case cublas_gemm_algo1_tensor_op = 101
     case cublas_gemm_algo2_tensor_op = 102

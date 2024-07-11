@@ -45,7 +45,7 @@ def convert_cpp_enum_to_swift(cpp_enum):
                 swift_case = re.sub(r'([a-z])([A-Z])', r'\1_\2', swift_case).lower()
                 if enum_value in value_to_case:
                     # Create an alias for the existing case
-                    swift_enum += f"    static var {swift_case}: {swift_enum_name} {{ return .{value_to_case[enum_value]} }} {comment}\n"
+                    swift_enum += f"    public static var {swift_case}: {swift_enum_name} {{ return .{value_to_case[enum_value]} }} {comment}\n"
                 else:
                     swift_enum += f"    case {swift_case} = {enum_value} {comment}\n"
                     value_to_case[enum_value] = swift_case
@@ -73,6 +73,6 @@ if __name__ == "__main__":
     cublas_header_path = get_cublas_header_path()
     cublas_enum_content = read_cublas_enum(cublas_header_path)
     swift_enum_content = convert_cpp_enum_to_swift(cublas_enum_content)
-    output_file_path = Path("Sources/SwiftCUBlas/CUBlasTypes/CUBlasEnums.swift")
+    output_file_path = Path("Sources/SwiftCUBLAS/CUBLASTypes/CUBLASEnums.swift")
     write_to_file(output_file_path, swift_enum_content)
     os.system(f"swift-format {output_file_path} -i {output_file_path}")

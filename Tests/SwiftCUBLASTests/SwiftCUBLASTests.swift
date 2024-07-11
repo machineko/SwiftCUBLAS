@@ -264,7 +264,7 @@ final class SwiftCUBLASGenericTests: XCTestCase {
         XCTAssert(Bool(npy.allclose(npyMatmul, cNpyArray))!)
     }
 
-    func testSimpleMatmulRowMajorU8F32() throws {
+    func testSimpleMatmulRowMajorI8F32() throws {
         let m = 2
         let n = 2
         let k = 4
@@ -299,7 +299,7 @@ final class SwiftCUBLASGenericTests: XCTestCase {
         _ = bPointer.cudaMemoryCopy(fromRawPointer: &B, numberOfBytes: B.count * i8Size, copyKind: .cudaMemcpyHostToDevice)
 
         let handle = CUBLASHandle()
-        // Input types => UInt8, Output type => F32, compute type => F32
+        // Input types => Int8, Output type => F32, compute type => F32
         var params = CUBLASParamsMixed<Int8, Float32, Float32>(
             fromRowMajor: aPointer!.assumingMemoryBound(to: Int8.self), B: bPointer!.assumingMemoryBound(to: Int8.self),
             C: cPointer!.assumingMemoryBound(to: Float32.self), m: Int32(m), n: Int32(n), k: Int32(k), alpha: 1.0, beta: 0.0

@@ -18,7 +18,7 @@ let package = Package(
     dependencies: 
     [
         .package(url: "https://github.com/machineko/SwiftCU", branch: "main"),
-        .package(url: "https://github.com/pvieito/PythonKit.git", branch: "master"),
+        .package(url: "https://github.com/apple/swift-testing.git", from: "0.10.0"),
     ],
     targets: [
         .target(
@@ -46,7 +46,7 @@ let package = Package(
            
             dependencies: [
                 "SwiftCU", "cxxCUBLAS", "SwiftCUBLAS",
-                .product(name: "PythonKit", package: "PythonKit")
+                .product(name: "Testing", package: "swift-testing"), 
             ],
              swiftSettings: [
                 .interoperabilityMode(.Cxx),

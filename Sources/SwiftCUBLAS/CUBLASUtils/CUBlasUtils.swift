@@ -35,10 +35,10 @@ extension CUBLASParamsMixed {
             return CUDA_R_8I
         case is Int32.Type:
             return CUDA_R_32I
-        case is __half.Type:
+        case is Float16.Type:
             return CUDA_R_16F
         default:
-            fatalError("Unsupported CUBLAS data type")
+            fatalError("\(inputType.self) not supported")
         }
     }
 
@@ -49,14 +49,14 @@ extension CUBLASParamsMixed {
             return CUDA_R_32F
         case is Double.Type:
             return CUDA_R_64F
-        case is UInt8.Type:
-            return CUDA_R_8U
+        case is Int8.Type:
+            return CUDA_R_8I
         case is Int32.Type:
             return CUDA_R_32I
-        case is __half.Type:
+        case is Float16.Type:
             return CUDA_R_16F
         default:
-            fatalError("Unsupported CUBLAS data type")
+            fatalError("\(inputType.self) not supported")
         }
     }
 }
@@ -223,24 +223,11 @@ extension CUBLASHandle {
         let status = cublasSgemm_v2(
             self.handle, transposeA.ascublas, transposeB.ascublas, params.m, params.n,
             params.k, &params.alpha, params.A, params.lda, params.B, params.ldb, &params.beta, params.C, params.ldc
-        )
-        return status.asSwift
-    }
-
-    /// Performs half-precision general matrix multiplication (HGEMM) using CUBLAS.
-    /// - Parameters:
-    ///   - transposeA: Specifies whether to transpose matrix A.
-    ///   - transposeB: Specifies whether to transpose matrix B.
-    ///   - params: The parameters for the HGEMM operation.
-    /// - Returns: The status of the HGEMM operation.
-    public func hgemm(
-        transposeA: cublasOperation = .cublas_op_n, transposeB: cublasOperation = .cublas_op_n, params: inout CUBLASParams<__half>
-    ) -> cublasStatus {
-        let status = cublasHgemm(
-            self.handle, transposeA.ascublas, transposeB.ascublas, params.m, params.n,
-            params.k, &params.alpha, params.A, params.lda, params.B, params.ldb, &params.beta, params.C, params.ldc
-        )
-        return status.asSwift
+        ).asSwift
+        #if safetyCheck
+            status.safetyCheckCondition(message: "Can't run sgemm cublasSgemm_v2 function \(status)")
+        #endif
+        return status
     }
 
     /// Performs mixed-precision general matrix multiplication (GEMM) using CUBLAS.
@@ -269,7 +256,10 @@ extension CUBLASHandle {
             params.C, params.outputCUDAType, params.ldc,
             computeType.ascublas,
             cublasGemmAlgo.ascublas
-        )
-        return status.asSwift
+        ).asSwift
+        #if safetyCheck
+            status.safetyCheckCondition(message: "Can't run cublasGemmEx function \(status)")
+        #endif
+        return status
     }
 }

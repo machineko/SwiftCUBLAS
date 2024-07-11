@@ -163,7 +163,7 @@ struct SwiftCUBLASGenericGEMMTests {
         _ = bPointer.cudaMemoryCopy(fromRawPointer: &B, numberOfBytes: B.count * f16Size, copyKind: .cudaMemcpyHostToDevice)
 
         let handle = CUBLASHandle()
-        // Input types => __half, Output type => F32, compute type => F32
+
         var params = CUBLASParamsMixed<Float16, Float32, Float32>(
             fromRowMajor: aPointer!.assumingMemoryBound(to: Float16.self), B: bPointer!.assumingMemoryBound(to: Float16.self),
             C: cPointer!.assumingMemoryBound(to: Float32.self), m: Int32(m), n: Int32(n), k: Int32(k), alpha: 1.0, beta: 0.0
@@ -224,7 +224,7 @@ struct SwiftCUBLASGenericGEMMTests {
         _ = bPointer.cudaMemoryCopy(fromRawPointer: &B, numberOfBytes: B.count * i8Size, copyKind: .cudaMemcpyHostToDevice)
 
         let handle = CUBLASHandle()
-        // Input types => Int8, Output type => F32, compute type => F32
+
         var params = CUBLASParamsMixed<Int8, Float32, Float32>(
             fromRowMajor: aPointer!.assumingMemoryBound(to: Int8.self), B: bPointer!.assumingMemoryBound(to: Int8.self),
             C: cPointer!.assumingMemoryBound(to: Float32.self), m: Int32(m), n: Int32(n), k: Int32(k), alpha: 1.0, beta: 0.0

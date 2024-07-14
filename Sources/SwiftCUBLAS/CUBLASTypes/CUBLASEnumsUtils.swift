@@ -2,13 +2,25 @@ import cxxCUBLAS
 
 extension cublasOperation {
     public var ascublas: cublasOperation_t {
-        return .init(UInt32(self.rawValue))
+        #if os(Linux)
+            return .init(UInt32(self.rawValue))
+        #elseif os(Windows)
+            return .init(Int32(self.rawValue))
+        #else
+            fatalerror()
+        #endif
     }
 }
 
 extension cublasComputeType {
     public var ascublas: cublasComputeType_t {
-        return .init(UInt32(self.rawValue))
+        #if os(Linux)
+            return .init(UInt32(self.rawValue))
+        #elseif os(Windows)
+            return .init(Int32(self.rawValue))
+        #else
+            fatalerror()
+        #endif
     }
 }
 

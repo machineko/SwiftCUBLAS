@@ -46,7 +46,7 @@ let package = Package(
              swiftSettings: [
                 .interoperabilityMode(.Cxx),
                 .unsafeFlags(
-                    ["-Xcc", cuIncludePath, "-Xcc", cuLibPath, "-Xcc", "-lcublas"]
+                    ["-Xcc", cuIncludePath]
                 )
             ]
         ),

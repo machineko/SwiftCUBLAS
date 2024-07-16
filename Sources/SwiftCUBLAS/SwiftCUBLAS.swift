@@ -19,7 +19,7 @@ public struct CUBLASHandle: ~Copyable {
         var handle: cublasHandle_t?
         let status = cublasCreate_v2(&handle).asSwift
         #if safetyCheck
-            precondition(status.isSuccessful, "Can't create handler cublasError: \(status)")
+            precondition(status.isSuccessful, "Can't create cublas handle cublasError: \(status)")
         #endif
         self.handle = handle
     }
@@ -28,7 +28,7 @@ public struct CUBLASHandle: ~Copyable {
     deinit {
         let status = cublasDestroy_v2(handle).asSwift
         #if safetyCheck
-            precondition(status.isSuccessful, "Can't launch kernel cublasError: \(status)")
+            precondition(status.isSuccessful, "Can't destroy cublas handle cublasError: \(status)")
         #endif
     }
 }

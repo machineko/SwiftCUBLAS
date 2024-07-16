@@ -8,7 +8,7 @@ import cxxCUBLAS
 struct SwiftCUBLASGEMMTests {
 
     @Test func testSimpleMatmulRowMajor() async throws {
-        let cuStatus = CUDevice(index: 0).setDevice()
+        let cuStatus = CUDADevice(index: 0).setDevice()
         #expect(cuStatus)
         let m = 2
         let n = 2
@@ -64,7 +64,7 @@ struct SwiftCUBLASGEMMTests {
     }
 
     @Test func testSimpleMatmulColumnMajor() async throws {
-        let cuStatus = CUDevice(index: 0).setDevice()
+        let cuStatus = CUDADevice(index: 0).setDevice()
         #expect(cuStatus)
         let m = 2
         let n = 2
@@ -124,7 +124,7 @@ struct SwiftCUBLASGEMMTests {
 struct SwiftCUBLASGenericGEMMTests {
 
     @Test func testSimpleMatmulRowMajorHalfF32() async throws {
-        let cuStatus = CUDevice(index: 0).setDevice()
+        let cuStatus = CUDADevice(index: 0).setDevice()
         #expect(cuStatus)
         let m = 2
         let n = 2
@@ -185,7 +185,7 @@ struct SwiftCUBLASGenericGEMMTests {
     }
 
     @Test func testSimpleMatmulRowMajorI8F32() async throws {
-        let cuStatus = CUDevice(index: 0).setDevice()
+        let cuStatus = CUDADevice(index: 0).setDevice()
         #expect(cuStatus)
         let m = 2
         let n = 2
@@ -244,7 +244,7 @@ struct SwiftCUBLASGenericGEMMTests {
     }
 
     @Test func testSimpleMatmulRowMajorHalf() async throws {
-        let cuStatus = CUDevice(index: 0).setDevice()
+        let cuStatus = CUDADevice(index: 0).setDevice()
         #expect(cuStatus)
         let m = 2
         let n = 2
@@ -304,7 +304,7 @@ struct SwiftCUBLASGenericGEMMTests {
     }
 
     @Test func testSimpleMatmulColumnMajorHalf() async throws {
-        let cuStatus = CUDevice(index: 0).setDevice()
+        let cuStatus = CUDADevice(index: 0).setDevice()
         #expect(cuStatus)
         let m = 2
         let n = 2

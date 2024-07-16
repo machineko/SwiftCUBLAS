@@ -18,6 +18,14 @@ let packageDir = URL(fileURLWithPath: #file).deletingLastPathComponent().path
 
 let package = Package(
     name: "SwiftCUBLAS",
+    products: [
+        .library(
+            name: "SwiftCUBLAS",
+            targets: ["SwiftCUBLAS"]),
+        .library(
+            name: "cxxCUBLAS",
+            targets: ["cxxCUBLAS"]),
+    ],
     dependencies: 
     [
         .package(url: "https://github.com/machineko/SwiftCU", branch: "main"),

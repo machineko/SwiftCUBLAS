@@ -1,7 +1,7 @@
 import cxxCUBLAS
 
-extension cublasOperation {
-    public var ascublas: cublasOperation_t {
+public extension cublasOperation {
+    var ascublas: cublasOperation_t {
         #if os(Linux)
             return .init(UInt32(self.rawValue))
         #elseif os(Windows)
@@ -12,8 +12,8 @@ extension cublasOperation {
     }
 }
 
-extension cublasComputeType {
-    public var ascublas: cublasComputeType_t {
+public extension cublasComputeType {
+    var ascublas: cublasComputeType_t {
         #if os(Linux)
             return .init(UInt32(self.rawValue))
         #elseif os(Windows)
@@ -24,8 +24,8 @@ extension cublasComputeType {
     }
 }
 
-extension cublasGemmAlgo {
-    public var ascublas: cublasGemmAlgo_t {
+public extension cublasGemmAlgo {
+    var ascublas: cublasGemmAlgo_t {
         return .init(Int32(self.rawValue))
     }
 }

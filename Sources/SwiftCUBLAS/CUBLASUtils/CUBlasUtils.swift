@@ -2,30 +2,30 @@ import Foundation
 import SwiftCU
 import cxxCUBLAS
 
-public extension cublasStatus_t {
+extension cublasStatus_t {
     /// Converts the `cublasStatus_t` to a Swift `cublasStatus`.
-    var asSwift: cublasStatus {
+    public var asSwift: cublasStatus {
         return cublasStatus(rawValue: Int(self.rawValue))!
     }
 }
 
-public extension cublasStatus {
+extension cublasStatus {
     /// Checks if the error represents a successful CUBLAS operation.
-    var isSuccessful: Bool {
+    public var isSuccessful: Bool {
         return self == .cublas_status_success
     }
 
     /// Checks the condition and throws a precondition failure if the error is not successful.
     /// - Parameter message: The message to include in the precondition failure.
     @inline(__always)
-    func safetyCheckCondition(message: String) {
+    public func safetyCheckCondition(message: String) {
         precondition(self.isSuccessful, "\(message): cudaErrorValue: \(self)")
     }
 }
 
-public extension CUBLASParamsMixed {
+extension CUBLASParamsMixed {
     /// Gets the CUDA data type for the input type.
-    var inputCUDAType: cudaDataType {
+    public var inputCUDAType: cudaDataType {
         switch inputType.self {
         case is Float.Type:
             return CUDA_R_32F
@@ -43,7 +43,7 @@ public extension CUBLASParamsMixed {
     }
 
     /// Gets the CUDA data type for the output type.
-    var outputCUDAType: cudaDataType {
+    public var outputCUDAType: cudaDataType {
         switch outputType.self {
         case is Float.Type:
             return CUDA_R_32F
@@ -61,7 +61,7 @@ public extension CUBLASParamsMixed {
     }
 }
 
-public extension CUBLASParamsMixed {
+extension CUBLASParamsMixed {
     /// Initializes the parameters from row-major data.
     /// - Parameters:
     ///   - A: Pointer to the first matrix.
@@ -73,7 +73,7 @@ public extension CUBLASParamsMixed {
     ///   - batchSize: The batch size.
     ///   - alpha: Scalar multiplier for the product of matrices A and B.
     ///   - beta: Scalar multiplier for the matrix C.
-    init(
+    public init(
         fromRowMajor A: UnsafePointer<inputType>, B: UnsafePointer<inputType>, C: UnsafeMutablePointer<outputType>, m: Int32, n: Int32,
         k: Int32, batchSize: Int32 = 0, alpha: computeType, beta: computeType
     ) {
@@ -106,7 +106,7 @@ public extension CUBLASParamsMixed {
     ///   - batchSize: The batch size.
     ///   - alpha: Scalar multiplier for the product of matrices A and B.
     ///   - beta: Scalar multiplier for the matrix C.
-    init(
+    public init(
         fromColumnMajor A: UnsafePointer<inputType>, B: UnsafePointer<inputType>, C: UnsafeMutablePointer<outputType>, m: Int32, n: Int32,
         k: Int32, batchSize: Int32 = 0, alpha: computeType, beta: computeType
     ) {
@@ -128,7 +128,7 @@ public extension CUBLASParamsMixed {
     }
 }
 
-public extension CUBLASParams {
+extension CUBLASParams {
     /// Initializes the parameters from row-major data.
     /// - Parameters:
     ///   - A: Pointer to the first matrix.
@@ -140,7 +140,7 @@ public extension CUBLASParams {
     ///   - batchSize: The batch size.
     ///   - alpha: Scalar multiplier for the product of matrices A and B.
     ///   - beta: Scalar multiplier for the matrix C.
-    init(
+    public init(
         fromRowMajor A: UnsafePointer<T>, B: UnsafePointer<T>, C: UnsafeMutablePointer<T>, m: Int32, n: Int32, k: Int32,
         batchSize: Int32 = 0, alpha: T, beta: T
     ) where T: CUBLASDataType {
@@ -173,7 +173,7 @@ public extension CUBLASParams {
     ///   - batchSize: The batch size.
     ///   - alpha: Scalar multiplier for the product of matrices A and B.
     ///   - beta: Scalar multiplier for the matrix C.
-    init(
+    public init(
         fromColumnMajor A: UnsafePointer<T>, B: UnsafePointer<T>, C: UnsafeMutablePointer<T>, m: Int32, n: Int32, k: Int32,
         batchSize: Int32 = 0, alpha: T, beta: T
     ) where T: CUBLASDataType {
@@ -195,10 +195,10 @@ public extension CUBLASParams {
     }
 }
 
-public extension CUBLASHandle {
+extension CUBLASHandle {
     /// Initializes a new CUBLAS handle with a CUDA stream.
     /// - Parameter stream: The CUDA stream to associate with the handle.
-    init(stream: inout cudaStream) {
+    public init(stream: inout cudaStream) {
         var handle: cublasHandle_t?
         let status = cublasCreate_v2(&handle).asSwift
         #if safetyCheck
@@ -217,7 +217,7 @@ public extension CUBLASHandle {
     ///   - transposeB: Specifies whether to transpose matrix B.
     ///   - params: The parameters for the SGEMM operation.
     /// - Returns: The status of the SGEMM operation.
-    func sgemm_v2(
+    public func sgemm_v2(
         transposeA: cublasOperation = .cublas_op_n, transposeB: cublasOperation = .cublas_op_n, params: inout CUBLASParams<Float32>
     ) -> cublasStatus {
         let status = cublasSgemm_v2(
@@ -238,7 +238,7 @@ public extension CUBLASHandle {
     ///   - computeType: The compute type for the GEMM operation.
     ///   - cublasGemmAlgo: The algorithm to use for the GEMM operation.
     /// - Returns: The status of the GEMM operation.
-    func gemmEx<inputType: CUBLASDataType, outputType: CUBLASDataType, computeType: CUBLASDataType>(
+    public func gemmEx<inputType: CUBLASDataType, outputType: CUBLASDataType, computeType: CUBLASDataType>(
         transposeA: cublasOperation = .cublas_op_n,
         transposeB: cublasOperation = .cublas_op_n,
         params: inout CUBLASParamsMixed<inputType, outputType, computeType>,

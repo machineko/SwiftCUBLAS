@@ -2,6 +2,7 @@ import SwiftCU
 import Testing
 import cxxCU
 import cxxCUBLAS
+
 @testable import SwiftCUBLAS
 
 @Suite("Basic GEMM tests")
@@ -181,7 +182,7 @@ struct SwiftCUBLASGenericGEMMTests {
         cudaDeviceSynchronize()
 
         let cExpected = matrixMultiply(m, n, k, A, B, isRowMajor: true)
-        #expect(cExpected.map{Float32($0)} ~= C)
+        #expect(cExpected.map { Float32($0) } ~= C)
     }
 
     @Test func testSimpleMatmulRowMajorI8F32() async throws {
@@ -240,7 +241,7 @@ struct SwiftCUBLASGenericGEMMTests {
         }
         cudaDeviceSynchronize()
         let cExpected = matrixMultiply(m, n, k, A, B, isRowMajor: true)
-        #expect(cExpected.map{Float32($0)} ~= C)
+        #expect(cExpected.map { Float32($0) } ~= C)
     }
 
     @Test func testSimpleMatmulRowMajorHalf() async throws {
@@ -300,7 +301,7 @@ struct SwiftCUBLASGenericGEMMTests {
         cudaDeviceSynchronize()
 
         let cExpected = matrixMultiply(m, n, k, A, B, isRowMajor: true)
-        #expect(cExpected.map{Float16($0)} ~= C)
+        #expect(cExpected.map { Float16($0) } ~= C)
     }
 
     @Test func testSimpleMatmulColumnMajorHalf() async throws {
@@ -360,6 +361,6 @@ struct SwiftCUBLASGenericGEMMTests {
         cudaDeviceSynchronize()
 
         let cExpected = matrixMultiply(m, n, k, A, B, isRowMajor: false)
-        #expect(cExpected.map{Float16($0)} ~= C)
+        #expect(cExpected.map { Float16($0) } ~= C)
     }
 }

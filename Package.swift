@@ -10,7 +10,7 @@ let packageDir = URL(fileURLWithPath: #file).deletingLastPathComponent().path
     
 #elseif os(Linux)
     let cuPath = ProcessInfo.processInfo.environment["CUDA_HOME"] ?? "/usr/local/cuda"
-    let cuLibPath = "-L\(cuPath)/lib/x64"
+    let cuLibPath = "-L\(cuPath)/lib64"
     let cuIncludePath = "-I\(cuPath)/include"
 #else
     fatalError("OS not supported \(os)")
@@ -28,8 +28,7 @@ let package = Package(
     ],
     dependencies: 
     [
-        .package(url: "https://github.com/machineko/SwiftCU", branch: "main"),
-        .package(url: "https://github.com/apple/swift-testing.git", from: "0.10.0"),
+        .package(url: "https://github.com/machineko/SwiftCU", branch: "main")
     ],
     targets: [
         .target(
@@ -50,6 +49,8 @@ let package = Package(
             dependencies: [
                 "cxxCUBLAS",
                 .product(name: "SwiftCU", package: "SwiftCU"),
+                .product(name: "cxxCU", package: "SwiftCU"),
+
             ],
              swiftSettings: [
                 .interoperabilityMode(.Cxx),
@@ -62,8 +63,9 @@ let package = Package(
             name: "SwiftCUBLASTests",
            
             dependencies: [
-                "SwiftCU", "cxxCUBLAS", "SwiftCUBLAS",
-                .product(name: "Testing", package: "swift-testing"), 
+                "cxxCUBLAS", "SwiftCUBLAS",
+                .product(name: "SwiftCU", package: "SwiftCU"),
+                .product(name: "cxxCU", package: "SwiftCU"),
             ],
              swiftSettings: [
                 .interoperabilityMode(.Cxx),

@@ -1,7 +1,7 @@
 import cxxCUBLAS
 
 /// A protocol that represents types compatible with CUBLAS operations.
-public protocol CUBLASDataType {}
+public protocol CUBLASDataType: Sendable {}
 
 extension Float16: CUBLASDataType {}
 extension Float: CUBLASDataType {}
